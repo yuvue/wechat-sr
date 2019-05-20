@@ -10,6 +10,7 @@ router.prefix('/api')
 
 router.post('/login', async (ctx, next) => {
   return passport.authenticate('local', async (err, user, info) => {
+    console.log('ctx.io', ctx.io)
     // 验证出错
     if (err) {
       ctx.status = 403

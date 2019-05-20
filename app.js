@@ -6,7 +6,7 @@ app.on('error', (err, ctx) => {
 })
 
 require('./global/connectMongoDB')
-require('./global/middleware')(app)
+let server = require('./global/middleware')(app)
 require('./global/routes')(app)
 
-module.exports = app
+module.exports = server
