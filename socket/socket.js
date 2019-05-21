@@ -7,17 +7,22 @@ const { getIdFromCookie } = require('../utils/tools')
  */
 function addSocketServer(app) {
   let io = require('socket.io')(app)
+  let clientMap = new Map()
   io.on('connection', async socket => {
-    console.log('user add')
-    io.on('disconnect', () => {
-      console.log('user exit')
-    })
     let id = await getIdFromCookie(socket.request.headers.cookie)
-    socket.emit('news', { msg: 22 })
     if (!id) {
-      socket.emit('error', { msg: '缺乏身份认证' })
+      socket.use((packet, next) => {
+        next(new Error('缺乏身份认证'))
+      })
     }
-    socket.id = id
+    socket.on('disconnect', () => {
+      console.log(`${id}, exit`)
+    })
+
+    console.log(`${id}, add`)
+
+    clientMap.set(id, socket.id)
+    io.clientMap = clientMap
   })
   return io
 }

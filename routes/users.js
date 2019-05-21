@@ -10,7 +10,6 @@ router.prefix('/api')
 
 router.post('/login', async (ctx, next) => {
   return passport.authenticate('local', async (err, user, info) => {
-    console.log('ctx.io', ctx.io)
     // 验证出错
     if (err) {
       ctx.status = 403
@@ -24,9 +23,10 @@ router.post('/login', async (ctx, next) => {
     // 验证失败
     if (!user) {
       ctx.status = 403
+      let code = 300091
       ctx.body = {
-        code: 300091,
-        msg: info.message,
+        code,
+        msg: errCode[code],
       }
       return
     }
@@ -44,6 +44,7 @@ router.post('/login', async (ctx, next) => {
 })
 
 router.get('/user', async ctx => {
+  ctx.send(ctx.session.passport.user, { msg: 'hahahh' })
   let query = getQuery(ctx.request.url)
   let user = await User.findOne(query)
   if (!user) {

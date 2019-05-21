@@ -47,6 +47,11 @@ module.exports = function(app) {
 
   app.use(async (ctx, next) => {
     ctx.io = io
+    ctx.send = (to_id, data) => {
+      // let id = io.clientMap.get(to_id)
+      // console.log(id)
+      io.of(to_id).emit(to_id, data)
+    }
     await next()
   })
 

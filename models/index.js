@@ -20,10 +20,13 @@ const getContacts = async function(user_id) {
       let messageList = []
       let info = await ContactInfo.findOne({ user_id, contact_id }, '-_id')
       messageList = await Message.get(user_id, contact_id)
+      let { avatar, email } = (await User.findById(contact_id))._doc
       return {
         ...item._doc,
         ...info._doc,
         messageList,
+        avatar,
+        email,
       }
     })
   )
@@ -54,7 +57,7 @@ const hasContact = async (user_id, contact_id) => {
  */
 const editContactInfo = async (user_id, contact_id) => {
   let remark = (await User.findById(contact_id)).nickname
-  let alpha = pinyin.getCamelChars(remark)[0]
+  let alpha = pinyin.getCamelChars(remark)
   let last_edit_time = new Date().getTime()
   let info = await ContactInfo.create({
     remark,
@@ -94,7 +97,24 @@ const saveContact = async function(user_id, contact_id, verifyText) {
     return reject({ code, msg: errCode[code] })
   }
   // 创建成功
-  return resolve({ ...a._doc, ...info._doc })
+  // 获取联系人avatar信息
+  let avatar = (await User.findById(contact_id)).avatar
+  return resolve({ ...a._doc, ...info._doc, avatar })
 }
 
-module.exports = { getContacts, saveContact, hasContact, editContactInfo }
+const setRemark = async function(user_id, contact_id, remark) {
+  let alpha = pinyin.getCamelChars(remark)
+  let res = await ContactInfo.updateOne(
+    { user_id, contact_id },
+    { remark, alpha }
+  )
+  if (!res) return reject({ msg: '修改备注出错' })
+  return resolve({ msg: '修改备注成功', ...res })
+}
+module.exports = {
+  getContacts,
+  saveContact,
+  hasContact,
+  editContactInfo,
+  setRemark,
+}
