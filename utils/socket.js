@@ -25,6 +25,14 @@ wss.send = function(to_id, msg) {
   ;[...wss.clients].some(client => client.id === to_id && client.send(msg))
 }
 
+wss.broadcast = function(from_id, msg, flag) {
+  typeof msg === 'object' && (msg = JSON.stringify(msg))
+  ;[...wss.clients].forEach(client => {
+    if (client.id === from_id && flag) return
+    client.send(msg)
+  })
+}
+
 async function upgrade(request, socket, head) {
   let reg = /id=(.*)/.exec(request.url)
   let id = reg[1] || ''

@@ -35,6 +35,11 @@ const userSchema = new Schema(
       type: String,
       default: '这是一条默认个性签名',
     },
+    last_edit_time: {
+      type: Number,
+      default: new Date().getTime(),
+      require: true,
+    },
   },
   {
     versionKey: false,

@@ -1,6 +1,6 @@
 const Router = require('koa-router')
-const Contact = require('../models/contact')
-const {} = require('../models/index')
+const Group = require('../models/group')
+const { getGroups, convertGroupData } = require('../models/index')
 
 let router = new Router({ prefix: '/api/group' })
 
@@ -11,28 +11,25 @@ router.get('/', async ctx => {
 })
 
 router.put('/', async ctx => {
-  console.log(ctx.request.headers.cookie)
+  let idList = ctx.request.body.idList
   let user_id = ctx.session.passport.user
-  let { id, verifyText = '' } = ctx.request.body
-  ctx.send(id, { msg: 'fdf' })
-  try {
-    let { user_contact, contact_user } = await saveContact(
-      user_id,
-      id,
-      verifyText
-    )
-    let msg = '发送验证消息成功，等待对方添加'
-    ctx.send(id, {
-      msg: `${contact_user.remark}请求添加你为好友`,
-      data: contact_user,
-      type: 'ADD_CONTACT',
-    })
-    ctx.body = { code: 0, user: user_contact, msg }
-  } catch (e) {
-    console.log('e', e)
-    ctx.status = 403
-    ctx.body = e
+  idList.push(user_id)
+  let res = await Group.create({ idList })
+  let group = await convertGroupData([res], user_id)
+  ctx.broadcast(user_id, {
+    msg: '新加入一个群聊',
+    data: group[0],
+    type: 'ADD_CONTACT',
+  })
+  if (res) {
+    ctx.body = {
+      group,
+    }
   }
+})
+
+router.post('/test', async ctx => {
+  // ctx.body = { res }
 })
 
 router.put('/remark', async ctx => {

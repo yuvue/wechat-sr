@@ -2,9 +2,41 @@ const User = require('../models/user')
 const Contact = require('./contact')
 const ContactInfo = require('./contactinfo')
 const Message = require('../models/message')
+const Group = require('../models/group')
 const { editObject, reject, resolve } = require('../utils/tools')
 const errCode = require('../config/errCode')
 const pinyin = require('js-pinyin')
+const async = require('async')
+
+const convertGroupData = async (groups, user_id) => {
+  let res = []
+  for (let g of groups) {
+    let idList = []
+
+    for (let id of g.idList) {
+      let { avatar } = await User.findById(user_id, { avatar: 1, _id: 0 })
+      idList.push({ id, avatar })
+    }
+    let messageList = await Message.find({
+      $or: [{ from_id: g._id }, { to_id: g._id }],
+    })
+    res.push({
+      ...g._doc,
+      idList,
+      user_id,
+      contact_id: g._id,
+      messageList,
+      type: 'group',
+    })
+  }
+  return res
+}
+
+const getGroups = async function(user_id) {
+  let groups = await Group.find({ idList: { $in: [user_id] } })
+  groups = await convertGroupData(groups, user_id)
+  return resolve(groups)
+}
 
 // 获取用户对应的联系人列表，其中包含对应的消息数组
 const getContacts = async function(user_id) {
@@ -41,10 +73,14 @@ const getContacts = async function(user_id) {
         messageList,
         avatar,
         email,
+        type: 'friend',
       }
     })
   )
-  return contacts
+
+  let groups = await getGroups(user_id)
+
+  return contacts.concat(groups)
 }
 
 /**
@@ -190,4 +226,6 @@ module.exports = {
   setRemark,
   saveMessage,
   getOneContact,
+  getGroups,
+  convertGroupData,
 }

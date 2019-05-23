@@ -47,6 +47,7 @@ module.exports = function(app) {
 
   app.use(async (ctx, next) => {
     ctx.send = wss.send
+    ctx.broadcast = wss.broadcast
     await next()
   })
 

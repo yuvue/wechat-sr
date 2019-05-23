@@ -3,19 +3,20 @@ const Schema = mongoose.Schema
 
 const GroupSchema = new Schema(
   {
-    memberList: {
+    idList: {
       type: Array,
       require: true,
     },
     remark: {
       type: String,
       require: true,
+      default: '群聊' + Date.now(),
     },
     avatar: {
       type: String,
-      default: 'img/avatar/default.jpeg',
+      default: '/img/avatar/default.jpeg',
     },
-    add_time: {
+    last_edit_time: {
       type: Number,
       default: new Date().getTime(),
       require: true,

@@ -22,11 +22,6 @@ const contactSchema = new Schema(
       type: String,
       default: '',
     },
-    add_time: {
-      type: Number,
-      default: new Date().getTime(),
-      require: true,
-    },
     last_edit_time: {
       type: Number,
       default: new Date().getTime(),

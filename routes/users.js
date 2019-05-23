@@ -1,7 +1,7 @@
 const Router = require('koa-router')
 const User = require('../models/user')
 const passport = require('../utils/passport')
-const { getContacts } = require('../models/index')
+const { getContacts, getGroups } = require('../models/index')
 const { getQuery } = require('../utils/tools')
 const errCode = require('../config/errCode')
 
