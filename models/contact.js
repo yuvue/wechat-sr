@@ -18,9 +18,9 @@ const contactSchema = new Schema(
     verifyText: {
       type: String,
     },
-    contactType: {
+    addFrom: {
       type: String,
-      default: 'friend',
+      default: '',
     },
     add_time: {
       type: Number,

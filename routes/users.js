@@ -44,7 +44,7 @@ router.post('/login', async (ctx, next) => {
 })
 
 router.get('/user', async ctx => {
-  ctx.send(ctx.session.passport.user, { msg: 'hahahh' })
+  // ctx.send(ctx.session.passport.user, { msg: 'hahahh' })
   let query = getQuery(ctx.request.url)
   let user = await User.findOne(query)
   if (!user) {

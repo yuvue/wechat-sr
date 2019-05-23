@@ -1,13 +1,8 @@
 const Router = require('koa-router')
 const Contact = require('../models/contact')
-const {
-  getContacts,
-  saveContact,
-  setRemark,
-  getOneContact,
-} = require('../models/index')
+const {} = require('../models/index')
 
-let router = new Router({ prefix: '/api/contact' })
+let router = new Router({ prefix: '/api/group' })
 
 router.get('/', async ctx => {
   let user_id = ctx.request.body.user_id

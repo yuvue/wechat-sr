@@ -10,6 +10,8 @@ const Store = new Redis().client
  */
 async function getIdFromCookie(cookie) {
   let tmp = /wechat=(.*?);/.exec(cookie)
+  console.log(cookie)
+  console.log(tmp)
   if (!tmp) return undefined
   return JSON.parse(await Store.get(`wechat:uid${tmp[1]}`)).passport.user
 }

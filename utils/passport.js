@@ -4,9 +4,7 @@ let User = require('../models/user')
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
-    console.log('local')
     let user = await User.findOne({ username })
-    console.log(user)
     if (!user) {
       return done(null, false, '用户名不存在')
     }

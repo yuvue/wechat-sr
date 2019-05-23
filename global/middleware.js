@@ -6,7 +6,8 @@ const koaBody = require('koa-body')
 const passport = require('../utils/passport')
 const session = require('koa-generic-session')
 const Redis = require('koa-redis')
-var http = require('http')
+const { wss } = require('../utils/socket')
+const http = require('http')
 
 const koaBodyConfig = {
   multipart: true, // 支持文件上传
@@ -22,7 +23,8 @@ const sessionConfig = {
   prefix: 'wechat:uid',
   store: new Redis(),
   cookie: {
-    maxAge: 10 ** 15,
+    maxAge: 60 * 1000 * 60 * 24,
+    httpOnly: true,
   },
 }
 
@@ -30,8 +32,6 @@ module.exports = function(app) {
   // error handler
   onerror(app)
   const server = http.createServer(app.callback())
-
-  let io = require('../socket/socket')(server)
 
   app.use(json())
   app.use(logger())
@@ -46,17 +46,11 @@ module.exports = function(app) {
   app.use(passport.session())
 
   app.use(async (ctx, next) => {
-    ctx.io = io
-    ctx.send = (to_id, data) => {
-      // let id = io.clientMap.get(to_id)
-      // console.log(id)
-      io.of(to_id).emit(to_id, data)
-    }
+    ctx.send = wss.send
     await next()
   })
 
-  app.use(require('koa-static')(__dirname + '/public'))
-  app.use(require('koa-static')(__dirname + '/views'))
+  app.use(require('koa-static')(path.join(__dirname, '../public')))
 
   return server
 }

@@ -11,9 +11,15 @@ const messageSchema = new Schema(
       type: String,
       require: true,
     },
-    msg: {
-      type: Object,
+    type: {
+      type: String,
       require: true,
+    },
+    text: {
+      type: String,
+    },
+    audiopath: {
+      type: String,
     },
     time: {
       type: Number,
