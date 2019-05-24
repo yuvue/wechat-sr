@@ -68,4 +68,24 @@ router.post('/comment', async ctx => {
   }
 })
 
+router.post('/collect', async ctx => {
+  let { id, config } = ctx.request.body
+  let user_id = ctx.session.passport.user
+  if (config !== 1 && config !== -1) {
+    ctx.status = 403
+    return (ctx.body = { code: -1, msg: '请求参数出错' })
+  }
+  let updateQuery =
+    config === 1
+      ? { $addToSet: { collects: user_id } }
+      : { $pull: { collects: user_id } }
+  res = await Moment.updateOne({ _id: id }, updateQuery)
+  if (res) {
+    ctx.body = {
+      res,
+      msg: config === 1 ? '已收藏' : '已取消收藏',
+    }
+  }
+})
+
 module.exports = router
