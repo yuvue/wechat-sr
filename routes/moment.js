@@ -1,7 +1,8 @@
 const Router = require('koa-router')
 const Moment = require('../models/moment')
+const Comment = require('../models/comment')
 const User = require('../models/user')
-const { getGroups, convertGroupData } = require('../models/index')
+const { getGroups, convertGroupData, saveComment } = require('../models/index')
 const { getPath } = require('../utils/tools')
 const multiparty = require('koa2-multiparty')
 
@@ -47,6 +48,23 @@ router.put('/', async ctx => {
       data: { ...res._doc, avatar },
       msg: '发表瞬间成功',
     }
+  }
+})
+
+router.post('/comment', async ctx => {
+  let { id, text } = ctx.request.body
+  let user_id = ctx.session.passport.user
+  let res = await saveComment({ user_id, to_id: id, text })
+  if (res) {
+    ctx.body = {
+      data: res,
+      msg: '评论成功',
+    }
+    ctx.broadcast(
+      user_id,
+      { data: { id: res.to_id, comment: res }, type: 'ADD_COMMENT' },
+      true
+    )
   }
 })
 

@@ -2,6 +2,7 @@ const User = require('../models/user')
 const Contact = require('./contact')
 const ContactInfo = require('./contactinfo')
 const Message = require('../models/message')
+const Comment = require('../models/comment')
 const Group = require('../models/group')
 const { editObject, reject, resolve } = require('../utils/tools')
 const errCode = require('../config/errCode')
@@ -220,10 +221,31 @@ const getOneContact = async function(user_id, contact_id) {
 
 const getResFromMoment = async function(moment) {
   let { avatar, nickname } = await User.findById(moment.user_id)
+  let _comments = await Comment.find({ to_id: moment._id })
+  let comments = []
+  for (let i = 0; i < _comments.length; i++) {
+    let user_id = _comments[i].user_id
+    let { avatar } = await User.findById(user_id)
+    comments.push({ ..._comments[i]._doc, avatar })
+  }
+  console.log(comments)
   return {
     ...moment._doc,
+    comments,
     avatar,
     nickname,
+  }
+}
+
+const saveComment = async function(data) {
+  try {
+    let res = await Comment.create(data)
+    if (res) {
+      let avatar = (await User.findById(data.user_id)).avatar
+      return { ...res._doc, avatar }
+    }
+  } catch (e) {
+    reject(e)
   }
 }
 
@@ -238,4 +260,5 @@ module.exports = {
   getGroups,
   convertGroupData,
   getResFromMoment,
+  saveComment,
 }
