@@ -1,5 +1,6 @@
 const Router = require('koa-router')
 const Moment = require('../models/moment')
+const User = require('../models/user')
 const { getGroups, convertGroupData } = require('../models/index')
 const { getPath } = require('../utils/tools')
 const multiparty = require('koa2-multiparty')
@@ -14,12 +15,13 @@ let router = new Router({ prefix: '/api/moment' })
 
 router.put('/', async ctx => {
   let { text, tags, seconds, config } = ctx.request.body
+  let user_id = ctx.session.passport.user
   let files = ctx.request.files
   let imgSrcList = []
   let audioPath = ''
-  let data = { text, tags, config }
+  let data = { text, tags, config, user_id }
 
-  if (seconds) {
+  if (seconds && files.audio) {
     let audioPath = getPath('/upload', files.audio.path)
     data.audio = {
       src: audioPath,
@@ -38,7 +40,13 @@ router.put('/', async ctx => {
 
   let res = await Moment.create(data)
   if (res) {
-    ctx.body = { data: res, msg: '发表瞬间成功' }
+    let { avatar, nickname } = (await User.findById(user_id, {
+      avatar: 1,
+    }))._doc
+    ctx.body = {
+      data: { ...res._doc, avatar },
+      msg: '发表瞬间成功',
+    }
   }
 })
 

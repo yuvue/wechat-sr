@@ -23,7 +23,6 @@ const momentSchema = new Schema(
     },
     collects: {
       type: Array,
-      default: 0,
     },
     likes: {
       type: Number,
@@ -38,7 +37,7 @@ const momentSchema = new Schema(
       type: Number,
       require: true,
     },
-    last_edit_time: {
+    add_time: {
       type: Number,
       default: new Date().getTime(),
       require: true,

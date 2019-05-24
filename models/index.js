@@ -218,6 +218,15 @@ const getOneContact = async function(user_id, contact_id) {
   }
 }
 
+const getResFromMoment = async function(moment) {
+  let { avatar, nickname } = await User.findById(moment.user_id)
+  return {
+    ...moment._doc,
+    avatar,
+    nickname,
+  }
+}
+
 module.exports = {
   getContacts,
   saveContact,
@@ -228,4 +237,5 @@ module.exports = {
   getOneContact,
   getGroups,
   convertGroupData,
+  getResFromMoment,
 }

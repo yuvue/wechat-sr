@@ -1,7 +1,8 @@
 const Router = require('koa-router')
 const User = require('../models/user')
+const Moment = require('../models/moment')
 const passport = require('../utils/passport')
-const { getContacts, getGroups } = require('../models/index')
+const { getContacts, getGroups, getResFromMoment } = require('../models/index')
 const { getQuery } = require('../utils/tools')
 const errCode = require('../config/errCode')
 
@@ -33,11 +34,22 @@ router.post('/login', async (ctx, next) => {
 
     // 认证成功
     let contacts = await getContacts(String(user._id))
+
+    // 获取瞬间
+    let idList = contacts.map(({ contact_id }) => contact_id)
+    idList.push(user._id)
+    let friendList = await Moment.find({ user_id: { $in: idList } })
+    let allList = await Moment.find({}).limit(100)
+
+    friendList = await getResFromMomentList(friendList)
+    allList = await getResFromMomentList(allList)
+
     ctx.body = {
       code: 0,
       msg: '登录成功',
       user,
       contacts,
+      moments: { friendList, allList },
     }
     return ctx.login(user)
   })(ctx, next)
@@ -104,5 +116,14 @@ router.patch('/user/edit', async ctx => {
     }
   }
 })
+
+async function getResFromMomentList(moments) {
+  let list = []
+  for (let i = 0; i < moments.length; i++) {
+    let moment = await getResFromMoment(moments[i])
+    list.push(moment)
+  }
+  return list
+}
 
 module.exports = router
