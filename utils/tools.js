@@ -58,10 +58,21 @@ function resolve(data) {
   return new Promise(resolve => resolve(data))
 }
 
+/**
+ * 从文件完整绝对路径获取相对当前项目的绝对路径
+ *
+ * @param {String} src 返回路径开始的字符
+ * @param {String} srcPath 要处理的路径
+ */
+function getPath(src, srcPath) {
+  return srcPath.slice(srcPath.indexOf(src))
+}
+
 module.exports = {
   editObject,
   getQuery,
   reject,
   resolve,
   getIdFromCookie,
+  getPath,
 }
