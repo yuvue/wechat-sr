@@ -79,11 +79,26 @@ router.post('/collect', async ctx => {
     config === 1
       ? { $addToSet: { collects: user_id } }
       : { $pull: { collects: user_id } }
-  res = await Moment.updateOne({ _id: id }, updateQuery)
+  let res = await Moment.updateOne({ _id: id }, updateQuery)
   if (res) {
     ctx.body = {
       res,
       msg: config === 1 ? '已收藏' : '已取消收藏',
+    }
+  }
+})
+
+router.post('/like', async ctx => {
+  let { id, config } = ctx.request.body
+  if (config !== 1 && config !== -1) {
+    ctx.status = 403
+    return (ctx.body = { code: -1, msg: '请求参数出错' })
+  }
+  let res = await Moment.updateOne({ _id: id }, { $inc: { likes: config } })
+  if (res) {
+    ctx.body = {
+      res,
+      msg: config === 1 ? '已喜欢' : '已取消喜欢',
     }
   }
 })
