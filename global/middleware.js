@@ -6,6 +6,7 @@ const koaBody = require('koa-body')
 const passport = require('../utils/passport')
 const session = require('koa-generic-session')
 const Redis = require('koa-redis')
+const { historyApiFallback } = require('koa2-connect-history-api-fallback')
 const { wss } = require('../utils/socket')
 const http = require('http')
 
@@ -53,6 +54,8 @@ module.exports = function(app) {
     ctx.broadcast = wss.broadcast
     await next()
   })
+
+  app.use(historyApiFallback({ htmlAcceptHeaders: ['text/html'] }))
 
   app.use(require('koa-static')(path.join(__dirname, '../public')))
   app.use(require('koa-static')(path.join(__dirname, '../dist')))
