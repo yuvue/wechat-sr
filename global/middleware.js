@@ -27,7 +27,7 @@ const sessionConfig = {
   store: new Redis(),
   cookie: {
     maxAge: 60 * 1000 * 60 * 24,
-    httpOnly: true,
+    httpOnly: false,
   },
 }
 
