@@ -40,18 +40,20 @@ const messageSchema = new Schema(
 const message = mongoose.model('message', messageSchema)
 
 message.get = async (id1, id2) => {
-  return await message.find({
-    $or: [
-      {
-        from_id: id1,
-        to_id: id2,
-      },
-      {
-        from_id: id2,
-        to_id: id1,
-      },
-    ],
-  })
+  return await message
+    .find({
+      $or: [
+        {
+          from_id: id1,
+          to_id: id2,
+        },
+        {
+          from_id: id2,
+          to_id: id1,
+        },
+      ],
+    })
+    .sort({ time: 1 })
 }
 
 module.exports = message
