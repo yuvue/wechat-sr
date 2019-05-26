@@ -18,8 +18,9 @@ const messageSchema = new Schema(
     text: {
       type: String,
     },
-    audiopath: {
-      type: String,
+    audio: {
+      src: String,
+      sec: Number,
     },
     time: {
       type: Number,
