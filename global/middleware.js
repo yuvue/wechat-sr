@@ -40,6 +40,13 @@ module.exports = function(app) {
   app.use(json())
   app.use(logger())
 
+  app.use(
+    historyApiFallback({
+      htmlAcceptHeaders: ['text/html', 'application/xhtml+xml'],
+      whiteList: ['/api'],
+    })
+  )
+
   app.use(koaBody(koaBodyConfig))
 
   app.keys = ['wechat', 'keyskeys']
@@ -54,8 +61,6 @@ module.exports = function(app) {
     ctx.broadcast = wss.broadcast
     await next()
   })
-
-  app.use(historyApiFallback({ htmlAcceptHeaders: ['text/html'] }))
 
   app.use(require('koa-static')(path.join(__dirname, '../public')))
   app.use(require('koa-static')(path.join(__dirname, '../dist')))

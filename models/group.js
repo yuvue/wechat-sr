@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+let i = 1
+
 const GroupSchema = new Schema(
   {
     idList: {
@@ -10,7 +12,7 @@ const GroupSchema = new Schema(
     remark: {
       type: String,
       require: true,
-      default: '群聊' + Date.now(),
+      default: '群聊' + ++i,
     },
     avatar: {
       type: String,
