@@ -16,7 +16,6 @@ router.get('/', async ctx => {
 })
 
 router.put('/', async ctx => {
-  console.log(ctx.request.headers.cookie)
   let user_id = ctx.session.passport.user
   let { id, verifyText = '' } = ctx.request.body
   ctx.send(id, { msg: 'fdf' })
@@ -34,7 +33,6 @@ router.put('/', async ctx => {
     })
     ctx.body = { code: 0, user: user_contact, msg }
   } catch (e) {
-    console.log('e', e)
     ctx.status = 403
     ctx.body = e
   }
@@ -47,7 +45,6 @@ router.put('/remark', async ctx => {
     let res = await setRemark(user_id, contact_id, remark)
     ctx.body = { code: 0, ...res }
   } catch (e) {
-    console.log('e', e)
     ctx.status = 403
     ctx.body = e
   }

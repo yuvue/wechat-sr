@@ -8,11 +8,7 @@ mongoose.connect(dbs, {
 let db = mongoose.connection
 
 db.on('error', console.error.bind(console, 'connection error:'))
-db.once('connected', function() {
-  console.log('mongodb connected')
-})
-db.once('disconnected', function() {
-  console.log('mongoose disconnected')
-})
+db.once('connected', function() {})
+db.once('disconnected', function() {})
 
 module.exports = db

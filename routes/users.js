@@ -38,8 +38,8 @@ router.post('/login', async (ctx, next) => {
     // 获取瞬间
     let idList = contacts.map(({ contact_id }) => contact_id)
     idList.push(user._id)
-    let friendList = await Moment.find({ user_id: { $in: idList } })
-    let allList = await Moment.find({}).limit(100)
+    let friendList = await Moment.find({ user_id: { $in: idList } }).limit(200)
+    let allList = await Moment.find({}).limit(300)
 
     friendList = await getResFromMomentList(friendList)
     allList = await getResFromMomentList(allList)

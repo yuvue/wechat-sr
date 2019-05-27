@@ -65,7 +65,6 @@ router.put('/remark', async ctx => {
     let res = await setRemark(user_id, contact_id, remark)
     ctx.body = { code: 0, ...res }
   } catch (e) {
-    console.log('e', e)
     ctx.status = 403
     ctx.body = e
   }

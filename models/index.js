@@ -228,7 +228,6 @@ const getResFromMoment = async function(moment) {
     let { avatar } = await User.findById(user_id)
     comments.push({ ..._comments[i]._doc, avatar })
   }
-  console.log(comments)
   return {
     ...moment._doc,
     comments,
