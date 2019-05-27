@@ -134,10 +134,10 @@ const editContactInfo = async (user_id, contact_id) => {
 const saveContact = async function(user_id, contact_id, verifyText) {
   let isContact = await hasContact(user_id, contact_id)
   // 联系人已存在
-  // if (isContact) {
-  //   let code = 301001
-  //   return reject({ code, msg: errCode[code] })
-  // }
+  if (isContact) {
+    let code = 301001
+    return reject({ code, msg: errCode[code] })
+  }
   // 否则创建
   try {
     let contact = await Contact.create({

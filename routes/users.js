@@ -38,8 +38,12 @@ router.post('/login', async (ctx, next) => {
     // 获取瞬间
     let idList = contacts.map(({ contact_id }) => contact_id)
     idList.push(user._id)
-    let friendList = await Moment.find({ user_id: { $in: idList } }).limit(200)
-    let allList = await Moment.find({}).limit(300)
+    let friendList = await Moment.find({ user_id: { $in: idList } })
+      .limit(200)
+      .sort({ add_time: 1 })
+    let allList = await Moment.find({})
+      .limit(300)
+      .sort({ add_time: 1 })
 
     friendList = await getResFromMomentList(friendList)
     allList = await getResFromMomentList(allList)
@@ -116,6 +120,11 @@ router.patch('/user/edit', async ctx => {
     }
   }
 })
+
+router.post('/test/get', async ctx => {
+  let ids = await User.find({}, { _id: 1 })
+  ctx.body = { ids }
+}
 
 async function getResFromMomentList(moments) {
   let list = []
