@@ -99,7 +99,7 @@ router.put("/user", async (ctx, next) => {
     }
 });
 
-router.get("/user/code", async (ctx, next) => {
+router.post("/user/code", async (ctx, next) => {
     let { email } = ctx.request.query;
     let user = User.findOne({ email });
     if (user) {

@@ -1629,6 +1629,11 @@ koa2-connect-history-api-fallback@^0.1.2:
   resolved "https://registry.npm.taobao.org/koa2-connect-history-api-fallback/download/koa2-connect-history-api-fallback-0.1.2.tgz#5f004fd2344d022e2de3fdca5f13bad23f23af41"
   integrity sha1-XwBP0jRNAi4t4/3KXxO60j8jr0E=
 
+koa2-cors@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.npm.taobao.org/koa2-cors/download/koa2-cors-2.0.6.tgz#9ad23df3a0b9bb84530b46f5944f3fb576086554"
+  integrity sha1-mtI986C5u4RTC0b1lE8/tXYIZVQ=
+
 koa2-multiparty@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/koa2-multiparty/download/koa2-multiparty-1.0.1.tgz#2244eb3de978f88bcf030c77b12520ef990a1480"
