@@ -101,11 +101,11 @@ router.put('/user', async (ctx, next) => {
 
 router.post('/user/code', async (ctx, next) => {
   let { email } = ctx.request.query;
-  let user = User.findOne({ email });
-  if (user) {
-    ctx.status = 403;
-    return (ctx.body = { code: -1, msg: '该邮箱已注册' });
-  }
+  //   let user = User.findOne({ email });
+  //   if (user) {
+  //     ctx.status = 403;
+  //     return (ctx.body = { code: -1, msg: '该邮箱已注册' });
+  //   }
   let verifyCode = stmp.code;
   let flag = await sendMail(
     email,
