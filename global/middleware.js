@@ -7,6 +7,7 @@ const passport = require('../utils/passport')
 const session = require('koa-generic-session')
 const Redis = require('koa-redis')
 const { historyApiFallback } = require('koa2-connect-history-api-fallback')
+const cors = require('koa2-cors')
 const { wss } = require('../utils/socket')
 const http = require('http')
 
@@ -36,6 +37,8 @@ module.exports = function(app) {
   // error handler
   onerror(app)
   const server = http.createServer(app.callback())
+
+  app.use(cors())
 
   app.use(json())
   app.use(logger())
