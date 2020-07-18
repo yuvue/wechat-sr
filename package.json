@@ -29,7 +29,7 @@
     "koa2-connect-history-api-fallback": "^0.1.2",
     "koa2-cors": "^2.0.6",
     "koa2-multiparty": "^1.0.1",
-    "mongoose": "^5.5.9",
+    "mongoose": "^5.7.5",
     "nodemailer": "^6.1.1",
     "passport-local": "^1.0.0",
     "redis": "^2.8.0",
