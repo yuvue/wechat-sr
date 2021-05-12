@@ -30,7 +30,7 @@
     "koa2-cors": "^2.0.6",
     "koa2-multiparty": "^1.0.1",
     "mongoose": "^5.5.9",
-    "nodemailer": "^6.1.1",
+    "nodemailer": "^6.4.16",
     "passport-local": "^1.0.0",
     "redis": "^2.8.0",
     "register-service-worker": "^1.6.2",
